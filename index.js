@@ -6,6 +6,7 @@ let port = process.env.PORT || 3000;
 
 io.on('connection', (socket) => {
     console.log('User Connected');
+    let connections = io.sockets.clients().server.engine.clientsCount;
     socket.on('chatmessage', (msg) => {
         if(msg != '') {
             console.log(msg);
@@ -18,6 +19,7 @@ io.on('connection', (socket) => {
             io.emit('device', device)
         }
     });
+    io.emit('connections', connections)
 });
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));
