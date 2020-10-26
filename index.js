@@ -14,7 +14,8 @@ io.on('connection', (socket) => {
     online = connections;
     console.log(socket.client.conn.server.clientsCount + " users online");
     socket.on('chatmessage', (msg) => {
-        if(msg != '') {
+        if(msg.message != '') {
+            
             texts.push(msg)
             // Reduce texts on server if they reach 1000
             if(texts.length == 1000) {
