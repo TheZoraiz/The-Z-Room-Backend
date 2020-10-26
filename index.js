@@ -6,30 +6,32 @@ let port = process.env.PORT || 3000;
 
 let online = 0;
 
+let texts = []
+
 io.on('connection', (socket) => {
     console.log('User Connected');
-    let connections = io.sockets.clients().server.engine.clientsCount;
-    online += 1;
+    let connections = socket.client.conn.server.clientsCount;
+    online = connections;
+    console.log(socket.client.conn.server.clientsCount + " users online");
     socket.on('chatmessage', (msg) => {
         if(msg != '') {
-            console.log(msg);
-            io.emit('chatmessage', msg)
+            texts.push(msg)
+            // Reduce texts on server if they reach 1000
+            if(texts.length == 1000) {
+                texts = texts.splice(200, 999);
+            }
+            console.log(texts);
+            io.emit('chatmessage', texts)
         }
     });
-    socket.on('device', (device) => {
-        if(device != '') {
-            console.log(device);
-            io.emit('device', device)
-        }
-    });
-
     socket.on('disconnect', () => {
-        console.log('dissconnected');
+        console.log('User Disconnected');
         online -= 1;
         io.emit('connections', online)
     });
 
-    io.emit('connections', online)
+    io.emit('chatmessage', texts)
+    io.emit('connections', connections)
 });
 
 
