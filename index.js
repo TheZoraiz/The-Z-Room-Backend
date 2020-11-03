@@ -46,6 +46,10 @@ io.on('connection', (socket) => {
 server.listen(port, () => console.log(`Server is running on port ${port}`));
 
 var iterator = 0;
-setInterval(() => console.log(++iterator), 10000);
+setInterval(() => {
+    console.log(++iterator);
+    if(iterator == 30)
+        iterator = 0;
+}, 5000);
 
 //commento
