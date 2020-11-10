@@ -7,7 +7,7 @@ let port = process.env.PORT || 3000;
 let online = 0;
 
 let texts = [
-    { name: 'Zoraiz', message: 'Hello there wanderer. I see the wheels of fate have carved your path to arive here' },
+    { name: 'Zoraiz', message: 'Hello there wanderer. I see the wheels of fate have carved your path to arrive here' },
     { name: 'Zoraiz', message: 'I humbly thank you for visiting my precious domain' },
     { name: 'Zoraiz', message: 'Though once this place was lively and undead, it has decayed to this state of unsightly existence' },
     { name: 'Zoraiz', message: 'Regardless, please remember, I existed' },
