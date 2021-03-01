@@ -12,11 +12,13 @@ let texts = [
     
 ]
 
-if(!fs.existsSync('./backup.txt'))
+if(!fs.existsSync('./backup.txt')){
+    console.log('Created backup file')
     fs.writeFileSync('./backup.txt', JSON.stringify(texts))
-else
+} else {
+    console.log('Found backup file')
     texts = [...JSON.parse(fs.readFileSync('./backup.txt', {encoding:'utf8', flag:'r'}))]
-
+}
 io.on('connection', (socket) => {
     console.log('User Connected');
     let connections = socket.client.conn.server.clientsCount;
