@@ -2,23 +2,13 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
-const fs = require('fs');
 
 let port = process.env.PORT || 3000;
 
 let online = 0;
 
-let texts = [
-    
-]
+let texts = []
 
-if(!fs.existsSync('./backup.txt')){
-    console.log('Created backup file')
-    fs.writeFileSync('./backup.txt', JSON.stringify(texts))
-} else {
-    console.log('Found backup file')
-    texts = [...JSON.parse(fs.readFileSync('./backup.txt', {encoding:'utf8', flag:'r'}))]
-}
 io.on('connection', (socket) => {
     console.log('User Connected');
     let connections = socket.client.conn.server.clientsCount;
@@ -28,7 +18,6 @@ io.on('connection', (socket) => {
         if(msg.message != '') {
             
             texts.push(msg)
-            fs.writeFileSync('./backup.txt', JSON.stringify(texts))
 
             if(texts.length == 1000) {
                 texts = texts.splice(200, 999);
