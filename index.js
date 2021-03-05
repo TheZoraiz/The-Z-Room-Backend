@@ -6,8 +6,8 @@ const io = require('socket.io').listen(server);
 // Database connectivity
 const { Client } = require('pg');
 const client = new Client({
-    connectionString: 'postgres://dzvnwnzpmxpnot:0a3db0171f65568f094da9e151a5501f56ed5c18f3b7b98677fa31cffbe21980@ec2-54-160-7-200.compute-1.amazonaws.com:5432/dahi0o1tf4oacl',
-    // connectionString: process.env.DATABASE_URL,
+    // connectionString: 'postgres://dzvnwnzpmxpnot:0a3db0171f65568f094da9e151a5501f56ed5c18f3b7b98677fa31cffbe21980@ec2-54-160-7-200.compute-1.amazonaws.com:5432/dahi0o1tf4oacl',
+    connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }
