@@ -48,7 +48,7 @@ const initiate = async() => {
     setInterval(() => {
         save();
         console.log('Database updated');
-    }, 300000);
+    }, 60000);
 
     io.on('connection', async(socket) => {
     
@@ -68,8 +68,8 @@ const initiate = async() => {
                 }
     
                 io.emit('chatmessage', texts);
-                await save();
-                console.log('Message saved');
+                // await save();
+                // console.log('Message saved');
             }
         });
         socket.on('disconnect', () => {
