@@ -3,13 +3,13 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
-// const { testDB } = require('./constants.js');
+const { testDB } = require('./constants.js');
 
 // Database connectivity
 const { Client } = require('pg');
 const client = new Client({
-    // connectionString: testDB,
-    connectionString: process.env.DATABASE_URL,
+    connectionString: testDB,
+    // connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }
@@ -36,7 +36,7 @@ const initiate = async() => {
 
     const save = (texts) => {
         return new Promise((resolve, reject) => {
-            let query = `UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1`;
+            let query = `UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1;`;
             
             console.log(query);
             
@@ -67,22 +67,25 @@ const initiate = async() => {
         socket.on('chatmessage', async(msg) => {
     
             if(msg.message != '') {
-                
-                texts.push(msg)
-                
+
+                texts.push(msg);
+
                 // To prevent too many texts from collecting in app
                 if(texts.length == 500) {
                     texts = texts.splice(100, 500);
                 }
 
-                let msgString = texts[texts.length].message;
-
-                msgString = msgString.replace(/'/g, '\\\'');
-                msgString = msgString.replace(/"/g, '\\\"');
-
-                texts[texts.length].message = msgString;
-    
                 io.emit('chatmessage', texts);
+
+                // let msgString = msg.message;
+                // console.log(JSON.stringify(texts));
+
+                // // msgString = msgString.replace(/'/g, '\\\'');
+                // // msgString = msgString.replace(/"/g, '\\\"');
+                // msg.message = msgString;
+                // texts[texts.length - 1] = msg;
+
+                // console.log(texts.toLocaleString());
                 await save(texts);
             }
         });
