@@ -3,13 +3,13 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
-const { testDB } = require('./constants.js');
+// const { testDB } = require('./constants.js');
 
 // Database connectivity
 const { Client } = require('pg');
 const client = new Client({
-    connectionString: testDB,
-    // connectionString: process.env.DATABASE_URL,
+    // connectionString: testDB,
+    connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }
