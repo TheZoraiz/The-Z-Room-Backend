@@ -26,7 +26,7 @@ const initiate = async() => {
     const getAllMessages = () => {
         return new Promise((resolve, reject) => {
             client.query('SELECT * FROM messages;', (err, res) => {
-                if (err) console.log(err);
+                if (err) throw err;
                 
                 texts = res.rows[0].data;
                 resolve();
@@ -38,7 +38,8 @@ const initiate = async() => {
         return new Promise((resolve, reject) => {
             let query = `UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1`;
             client.query(query, (err, res) => {
-                if (err) console.log(err);
+                if (err) throw err;
+                
                 resolve();
                 console.log('Message saved');
             });
