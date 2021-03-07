@@ -8,6 +8,7 @@ const io = require('socket.io').listen(server);
 // Database connectivity
 const { Client } = require('pg');
 const client = new Client({
+    // Test db..
     // connectionString: testDB,
     connectionString: process.env.DATABASE_URL,
     ssl: {
