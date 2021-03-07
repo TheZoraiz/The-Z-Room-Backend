@@ -1,3 +1,4 @@
+const { query } = require('express');
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
@@ -35,7 +36,8 @@ const initiate = async() => {
 
     const save = (texts) => {
         return new Promise((resolve, reject) => {
-            client.query(`UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1`, (err, res) => {
+            let query = `UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1`;
+            client.query(query, (err, res) => {
                 if (err) console.log(err);
                 resolve();
                 console.log('Message saved');
