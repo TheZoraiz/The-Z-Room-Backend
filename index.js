@@ -3,13 +3,13 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
-// const { testDB } = require('./constants.js');
+const { testDB } = require('./constants.js');
 
 // Database connectivity
 const { Client } = require('pg');
 const client = new Client({
-    // connectionString: testDB,
-    connectionString: process.env.DATABASE_URL,
+    connectionString: testDB,
+    // connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }
@@ -40,13 +40,16 @@ const initiate = async() => {
             for(let i = 0; i < tempTexts.length; i++) {
                 let msg = {...tempTexts[i]};
                 
+                let nameString = msg.name;
                 let msgString = msg.message;
     
                 msgString = msgString.replace(/'/g, '\'\'');
+                nameString = nameString.replace(/'/g, '\'\'');
                 
+                msg.name = nameString;
                 msg.message = msgString;
-                tempTexts[i] = msg;
 
+                tempTexts[i] = msg;
             }
 
             let query = `UPDATE messages SET data = (\'${JSON.stringify(tempTexts)}\') WHERE id = 1;`;
