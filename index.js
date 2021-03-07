@@ -14,7 +14,6 @@ const client = new Client({
     }
 });
 client.connect();
-console.log(process.env.DATABASE_URL);
   
 
 let port = process.env.PORT || 3000;
