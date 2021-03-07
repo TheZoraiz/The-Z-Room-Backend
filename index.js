@@ -39,6 +39,7 @@ const initiate = async() => {
             let query = `UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1`;
             query = query.replace(/'/g, '\\\'');
             query = query.replace(/"/g, '\\\"');
+            console.log(query);
             
             client.query(query, (err, res) => {
                 if (err) throw err;
