@@ -37,9 +37,12 @@ const initiate = async() => {
     const save = (texts) => {
         return new Promise((resolve, reject) => {
             let query = `UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1`;
+            query = query.replace(/'/g, '\\\'');
+            query = query.replace(/"/g, '\\\"');
+            
             client.query(query, (err, res) => {
                 if (err) throw err;
-                
+
                 resolve();
                 console.log('Message saved');
             });
