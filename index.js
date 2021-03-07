@@ -34,11 +34,22 @@ const initiate = async() => {
         })
     }
 
-    const save = (texts) => {
+    const save = (tempTexts) => {
         return new Promise((resolve, reject) => {
-            let query = `UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1;`;
-            
-            console.log(query);
+
+            for(let i = 0; i < tempTexts.length; i++) {
+                let msg = {...tempTexts[i]};
+                
+                let msgString = msg.message;
+    
+                msgString = msgString.replace(/'/g, '\'\'');
+                
+                msg.message = msgString;
+                tempTexts[i] = msg;
+
+            }
+
+            let query = `UPDATE messages SET data = (\'${JSON.stringify(tempTexts)}\') WHERE id = 1;`;
             
             client.query(query, (err, res) => {
                 if (err) throw err;
@@ -71,22 +82,11 @@ const initiate = async() => {
                 texts.push(msg);
 
                 // To prevent too many texts from collecting in app
-                if(texts.length == 500) {
-                    texts = texts.splice(100, 500);
-                }
+                if(texts.length == 300) texts = texts.splice(100, 300);
+                
 
                 io.emit('chatmessage', texts);
-
-                // let msgString = msg.message;
-                // console.log(JSON.stringify(texts));
-
-                // // msgString = msgString.replace(/'/g, '\\\'');
-                // // msgString = msgString.replace(/"/g, '\\\"');
-                // msg.message = msgString;
-                // texts[texts.length - 1] = msg;
-
-                // console.log(texts.toLocaleString());
-                await save(texts);
+                await save([...texts]);
             }
         });
         socket.on('disconnect', () => {
