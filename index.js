@@ -2,11 +2,12 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
+const { testDB } = require('./constants.js');
 
 // Database connectivity
 const { Client } = require('pg');
 const client = new Client({
-    // connectionString: 'postgres://dzvnwnzpmxpnot:0a3db0171f65568f094da9e151a5501f56ed5c18f3b7b98677fa31cffbe21980@ec2-54-160-7-200.compute-1.amazonaws.com:5432/dahi0o1tf4oacl',
+    // connectionString: testDB,
     connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
@@ -32,11 +33,12 @@ const initiate = async() => {
         })
     }
 
-    const save = () => {
+    const save = (texts) => {
         return new Promise((resolve, reject) => {
             client.query(`UPDATE messages SET data = (\'${JSON.stringify(texts)}\') WHERE id = 1`, (err, res) => {
                 if (err) throw err;
                 resolve();
+                console.log('Message saved');
             });
         }) 
     }
@@ -45,12 +47,12 @@ const initiate = async() => {
     console.log('Messages obtained from database');
 
     // Save messages to database every 5 minutes even without user interaction
-    setInterval(() => {
-        save();
-        console.log('Database updated');
-    }, 60000);
+    // setInterval(() => {
+    //     save();
+    //     console.log('Database updated');
+    // }, 60000);
 
-    io.on('connection', async(socket) => {
+    io.on('connection', (socket) => {
     
         console.log('User Connected');
         let connections = socket.client.conn.server.clientsCount;
@@ -68,8 +70,7 @@ const initiate = async() => {
                 }
     
                 io.emit('chatmessage', texts);
-                // await save();
-                // console.log('Message saved');
+                await save(texts);
             }
         });
         socket.on('disconnect', () => {
